@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { KakaoOauthRepository } from './kakao-oauth.repository';
 
 @Injectable()
 export class KakaoOauthService {
-    constructor(){}
+    constructor(private readonly kakaoOauthRepository: KakaoOauthRepository){}
     async requestKakaoLogin(): Promise<void> {
         //카카오 로그인 요청을 받으면, 인가코드를 요청한다.
     }
