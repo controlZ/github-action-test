@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entity/user.entity';
 import { KakaoOauthModule } from './kakao-oauth/kakao-oauth.module';
+import { CheckLoginModule } from './check-login/check-login.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { KakaoOauthModule } from './kakao-oauth/kakao-oauth.module';
       }),
     }),
     KakaoOauthModule,
+    CheckLoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],
