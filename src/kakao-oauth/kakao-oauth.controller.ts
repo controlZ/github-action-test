@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Query, Res } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { KakaoOauthService } from './kakao-oauth.service';
 
