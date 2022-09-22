@@ -14,7 +14,8 @@ export class KakaoOauthController {
   }
 
   @Get('returnToken')
-  async getAuthorizationToken(@Query('code') code: string): Promise<void> {
+  async getAuthorizationToken(@Query('code') code: string): Promise<string> {
+    console.log(code)
     return this.kakaoOuthService.getAuthorizationToken(code);
   }
 }

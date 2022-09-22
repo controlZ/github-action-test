@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import axios from 'axios';
 import { Response } from 'express';
 import { KakaoOauthRepository } from './kakao-oauth.repository';
 
@@ -21,21 +22,21 @@ export class KakaoOauthService {
     res.redirect(url);
   }
 
-  async getAuthorizationToken(code: string): Promise<void> {
+  async getAuthorizationToken(code: string): Promise<string> {
     //URI로 인가코드가 들어오면 접근 토큰을 받은후 사용자의 정보를 얻은 후 front end에 서비스 토큰을 준다.
     const AccessToken = this.getToken(code);
     this.extractinformation();
+    return '';
   }
 
   async getToken(code: string): Promise<string> {
     //인가 코드 받고 oauth 토큰을 받는다.
-    const Token = this.httpService.post(`https://kauth.kakao.com/oauth/token`, {
-      data: {
-        grant_type: 'authorization_code',
-        client_id: this.configservice.get<string>('REST_API_KEY'),
-        code: code,
-      },
-    });
+    const url = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${this.configservice.get<string>('REST_API_KEY')}&redirect_uri=${this.configservice.get<string>('REDIRECT_URI')}&code=${code}`;
+    const TokenJSON =axios.post(url,'',{
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
+      }).then((data)=>(console.log(data.data)));
     return '';
   }
 
