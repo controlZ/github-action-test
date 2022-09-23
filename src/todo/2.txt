@@ -1,0 +1,11 @@
+ id: 2440309843,
+  connected_at: '2022-09-22T15:07:21Z',
+  properties: { nickname: '박시원' },
+  kakao_account: {
+    profile_nickname_needs_agreement: false,
+    profile: { nickname: '박시원' },
+    has_email: true,
+    email_needs_agreement: false,
+    is_email_valid: true,
+    is_email_verified: true,
+    email: 'psw115@daum.net'

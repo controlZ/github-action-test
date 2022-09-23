@@ -14,13 +14,15 @@ export class KakaoOauthRepository {
     }
 
     async findOneByUsername(username: string): Promise<User | undefined> {
-        return this.dataSource.manager.findOneBy(User, {username: username});
+        return this.dataSource.manager.findOneBy(User, {nickname: username});
     }
 
-    async createUser(username: string): Promise<void> {
+    async createUser(userdata): Promise<void> {
         this.dataSource.transaction(async (manager: EntityManager): Promise<void> =>{
             const UserToCreate = new User();
-            UserToCreate.username = username;
+            UserToCreate.id = userdata.id
+            UserToCreate.nickname = userdata.properties.nickname;
+            UserToCreate.email = userdata.kakao_account.email;
             await manager.save(UserToCreate);
         })
     }
@@ -28,7 +30,7 @@ export class KakaoOauthRepository {
     async updateUser(Id: number, username: string): Promise<void> {
         this.dataSource.transaction(async (manager:EntityManager): Promise<void> => {
             const UserToUpdate = await manager.findOneBy(User,{id: Id});
-            UserToUpdate.username = username;
+            UserToUpdate.nickname = username;
             await manager.save(UserToUpdate);
         })
     }
