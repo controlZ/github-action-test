@@ -29,7 +29,7 @@ export class KakaoOauthService {
     const userData = await this.extractinformation(AccessToken);
     await this.checkUser(userData);
     console.log(await this.checkUser(userData));
-    return '';
+    return 'success';
   }
 
   async getToken(code: string): Promise<string> {
@@ -64,7 +64,7 @@ export class KakaoOauthService {
   async checkUser(userdata): Promise<string> {
     //사용자가 존재하는 사용자인지 확인(없으면 회원가입)
     const user = await this.kakaoOauthRepository.findOneById(userdata.id);
-    if (user === null) {
+    if (user == null) {
       await this.saveUserInfo(userdata);
     } else return this.login(userdata);
   }

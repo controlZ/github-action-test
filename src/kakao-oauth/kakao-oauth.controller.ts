@@ -1,12 +1,10 @@
-import { Controller, Get, Post, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { KakaoOauthService } from './kakao-oauth.service';
 
 @Controller('kakao-oauth')
 export class KakaoOauthController {
-  constructor(
-    private readonly kakaoOuthService: KakaoOauthService,
-  ) {}
+  constructor(private readonly kakaoOuthService: KakaoOauthService) {}
 
   @Get('')
   async requestKakaologin(@Res() res: Response): Promise<void> {
