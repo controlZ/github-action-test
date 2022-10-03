@@ -11,32 +11,14 @@ export class KakaoOauthRepository {
   }
 
   async createUser(userdata): Promise<void> {
-    this.dataSource.transaction(
-      async (manager: EntityManager): Promise<void> => {
+    await this.dataSource.manager.transaction(
+      async (entityManager: EntityManager): Promise<void> => {
         const UserToCreate = new User();
         UserToCreate.id = userdata.id;
         UserToCreate.nickname = userdata.properties.nickname;
         UserToCreate.email = userdata.kakao_account.email;
-        await manager.save(UserToCreate);
-      },
-    );
-  }
 
-  async updateUser(Id: bigint, username: string): Promise<void> {
-    this.dataSource.transaction(
-      async (manager: EntityManager): Promise<void> => {
-        const UserToUpdate = await manager.findOneBy(User, { id: Id });
-        UserToUpdate.nickname = username;
-        await manager.save(UserToUpdate);
-      },
-    );
-  }
-
-  async deleteUser(Id: bigint): Promise<void> {
-    this.dataSource.transaction(
-      async (manager: EntityManager): Promise<void> => {
-        const UserToDelete = await manager.findOneBy(User, { id: Id });
-        await manager.remove(UserToDelete);
+        await entityManager.save(UserToCreate);
       },
     );
   }
