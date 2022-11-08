@@ -1,4 +1,4 @@
-name: Deploy to Kakao IdP Server
+name: Deploy to Kakao IdP BE Server
 
 on:
   push:
