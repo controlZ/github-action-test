@@ -42,8 +42,6 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_BE_REPOSITORY:$IMAGE_TAG"
       - name: Commit and push changes
         run: |
-          GITHUB_SHA=${{ github.sha }}
-          IMAGE_TAG=${GITHUB_SHA::7}
           git config --global user.email "o_dahyun@gm.gist.ac.kr"
           git config --global user.name "controlZ"
           git add .
