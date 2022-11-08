@@ -44,7 +44,6 @@ jobs:
         run: |
           GITHUB_SHA=${{ github.sha }}
           IMAGE_TAG=${GITHUB_SHA::7}
-          cd kakao-idp-BE
           git config --global user.email "o_dahyun@gm.gist.ac.kr"
           git config --global user.name "controlZ"
           git add .
