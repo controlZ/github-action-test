@@ -49,40 +49,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Determine ENV-Specific Docker-Compose.yaml from Branch Name
-      id: determine-env-specific-docker-compose-yaml
-      run: |
-        ENV_NAME=$(python3 deployment/repo_env_mapper.py ${{ github.ref_name }})
-        echo "::set-output name=env_name::${ENV_NAME}" 
-        echo "::set-output name=docker_compose_env::docker-compose.${ENV_NAME}.yaml" 
-    
-    - name: Set Deployment Target directory
-      id: set-deployment-target-directory
-      env:
-        PREFIX: deployments
-        TARGET_DIRECTORY: gistory-be
-      run: |
-        echo "::set-output name=target_directory::${PREFIX}/${TARGET_DIRECTORY}-${{ steps.determine-env-specific-docker-compose-yaml.outputs.env_name }}" 
-    
-    - name: Render Docker-compose
-      id: render-docker-compose
-      uses: chuhlomin/render-template@v1.2
-      with:
-        template: deployment/docker-compose.shared.yaml
-        vars: |
-          image: ${{ needs.build.outputs.image }}
-          
-    - name: Send ENV-specific Docker-compose.yaml
-      id: upload-env-specific-docker-compose
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "deployment/${{ steps.determine-env-specific-docker-compose-yaml.outputs.docker_compose_env }}"
-        target: "${{ steps.set-deployment-target-directory.outputs.target_directory }}"
-        strip_components: 1
-
     - name: Deploy
       id: deploy
       uses: appleboy/ssh-action@master
