@@ -1,0 +1,42 @@
+name: Deploy to Kakao IdP Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: build image
+    runs-on: ubuntu-latest
+    outputs:
+      registry: ${{ steps.login-ecr.outputs.registry }}
+      image: ${{ steps.build-image.outputs.image }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ECR_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ECR_ACCESS_SECRET }}
+          aws-region: ap-northeast-2
+          mask-aws-account-id: no
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Backend Amazon ECR
+        id: build-be-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_BE_REPOSITORY: github-action-test
+        run: |
+          GITHUB_SHA=${{ github.sha }}
+          IMAGE_TAG=${GITHUB_SHA::7}
+          docker build -t $ECR_REGISTRY/$ECR_BE_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_BE_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_BE_REPOSITORY:$IMAGE_TAG"
