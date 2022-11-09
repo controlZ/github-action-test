@@ -1,0 +1,9 @@
+version: "3"
+services:
+  node:
+    container_name: "node"
+    build:
+      context: ./kakao-idp-BE
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
